@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: treehub
+  name: ingress
+spec:
+  backend:
+    serviceName: www
+    servicePort: 80
+  rules:
+  - host: underground.treehub.com
+    http:
+      paths:
+      - backend:
+          serviceName: ghost
+          servicePort: 80

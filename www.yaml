@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: treehub
+  name: www
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: www
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: treehub
+  name: www
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: www
+    spec:
+      containers:
+      - name: www
+        image: treehub/www:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
