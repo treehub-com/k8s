@@ -18,6 +18,8 @@ metadata:
   name: ghost
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -29,3 +31,11 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 2368
+        volumeMounts:
+        - mountPath: /var/lib/ghost
+          name: data
+      volumes:
+      - name: data
+        gcePersistentDisk:
+          pdName: ghost
+          fsType: ext4
