@@ -27,10 +27,21 @@ spec:
     spec:
       containers:
       - name: ghost
-        image: ghost:latest
+        image: ghost:0.11.7
         imagePullPolicy: Always
+        env:
+        - name: NODE_ENV
+          value: production
         ports:
         - containerPort: 2368
+        readinessProbe:
+          httpGet:
+            path: /favicon.ico
+            port: 2368
+          periodSeconds: 5
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 10
         volumeMounts:
         - mountPath: /var/lib/ghost
           name: data
