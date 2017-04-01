@@ -27,5 +27,49 @@ spec:
       - name: www
         image: treehub/www:latest
         imagePullPolicy: Always
+        env:
+        - name: MYSQL_HOST
+          value: 127.0.0.1
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: www
+              key: mysql_user
+        - name: MYSQL_PWD
+          valueFrom:
+            secretKeyRef:
+              name: www
+              key: mysql_pwd
+        - name: MYSQL_DATABASE
+          value: treehub
+        - name: MAILGUN_DOMAIN
+          value: treehub.com
+        - name: MAILGUN_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: www
+              key: mailgun_api_key
         ports:
         - containerPort: 8080
+      - name: cloudsql-proxy
+        image: b.gcr.io/cloudsql-docker/gce-proxy:1.05
+        command: ["/cloud_sql_proxy", "--dir=/cloudsql",
+                  "-instances=treehub-154014:us-central1:treehub=tcp:3306",
+                  "-credential_file=/secrets/cloudsql/credentials.json"]
+        volumeMounts:
+          - name: cloudsql-oauth-credentials
+            mountPath: /secrets/cloudsql
+            readOnly: true
+          - name: ssl-certs
+            mountPath: /etc/ssl/certs
+          - name: cloudsql
+            mountPath: /cloudsql
+      volumes:
+      - name: cloudsql-oauth-credentials
+        secret:
+          secretName: cloudsql-oauth-credentials
+      - name: ssl-certs
+        hostPath:
+          path: /etc/ssl/certs
+      - name: cloudsql
+        emptyDir:
