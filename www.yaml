@@ -38,6 +38,8 @@ spec:
             secretKeyRef:
               name: storage-oauth-credentials
               key: credentials.json
+        - name: GCLOUD_BUCKET_PACKAGES
+          value: packages.treehub.com
         - name: MYSQL_HOST
           value: 127.0.0.1
         - name: MYSQL_USER
