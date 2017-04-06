@@ -19,3 +19,4 @@ For Cloud Storage create a service account and place the credentials.json file i
 - `mailgun_api_key`
 - `mysql_pwd`
 - `mysql_user`
+- `gcloud_project_id` - Google cloud project ID used by the SDK

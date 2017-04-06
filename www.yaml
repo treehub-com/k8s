@@ -28,6 +28,16 @@ spec:
         image: treehub/www:latest
         imagePullPolicy: Always
         env:
+        - name: GCLOUD_PROJECT_ID
+          valueFrom:
+            secretKeyRef:
+              name: www
+              key: gcloud_project_id
+        - name: GCLOUD_STORAGE_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: storage-oauth-credentials
+              key: credentials.json
         - name: MYSQL_HOST
           value: 127.0.0.1
         - name: MYSQL_USER
